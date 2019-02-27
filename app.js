@@ -37,5 +37,3 @@ mongoose.connect(MONGO_URI, {useNewUrlParser: true})
         .catch(err => {
             console.log(err.msg)
         })
-
-app.listen(4000);
