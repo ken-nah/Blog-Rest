@@ -58,8 +58,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    'mongodb://localhost/blog',
-    { useNewUrlParser: true}
+    'mongodb://localhost/blog'
   )
   .then(result => {
     app.listen(8080);
