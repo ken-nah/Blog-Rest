@@ -22,10 +22,9 @@ exports.getPosts = (req, res, next) => {
 exports.createPost = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json({
-      message: 'Title and Content must be at least 5 characters',
-      errors: errors.array()
-    })
+    const error = new Error('Title and Content should be at least 5 characters long')
+    error.statusCode = 422;
+    throw error;
   }
   const title = req.body.title;
   const content = req.body.content;
@@ -46,5 +45,7 @@ exports.createPost = (req, res, next) => {
           post
         });
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        next(err)
+      })
 };
