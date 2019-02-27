@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose')
 
 const feedRoutes = require('./routes/feed');
 
@@ -16,5 +17,15 @@ app.use((req, res, next) => {
 });
 
 app.use('/feed', feedRoutes);
+
+const MONGO_URI = 'mongodb://localhost/blog'
+mongoose.connect(MONGO_URI, {useNewUrlParser: true})
+        .then(connection => {
+            console.log('Connected to MongoDB..');
+            app.listen(5000);
+        })
+        .catch(err => {
+            console.log(err.msg)
+        })
 
 app.listen(4000);
