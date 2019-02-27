@@ -21,8 +21,12 @@ exports.createPost = (req, res, next) => {
     message: 'Post created successfully!',
     post: {
       id: new Date().toISOString(),
-      title: title,
-      content: content
+      title,
+      content,
+      creator: {
+        name: 'Kennah'
+      },
+      createdAt: new Date()
     }
   });
 };
