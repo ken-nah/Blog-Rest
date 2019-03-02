@@ -34,7 +34,10 @@ const fileFilter = (req, file, cb) => {
 // app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
 app.use(bodyParser.json()); // application/json
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+  multer({
+    storage: fileStorage,
+    fileFilter: fileFilter
+  }).single('image')
 );
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
@@ -52,17 +55,29 @@ app.use('/feed', feedRoutes);
 app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
+  console.log(error);
   const status = error.statusCode || 500;
   const message = error.message;
-  res.status(status).json({ message: message });
+  const data = error.data;
+  res.status(status).json({
+    message: message,
+    data: data
+  });
 });
 
 mongoose
   .connect(
-    'mongodb://localhost/blog',
-    { useNewUrlParser : true}
+    'mongodb://localhost/blog', {
+      useNewUrlParser: true
+    }
   )
   .then(result => {
-    app.listen(8080);
+    const server =  app.listen(8080, () => {
+      console.log('Server listening at port 8080')
+    });
+    const io = require('socket.io')(server);
+    io.on('connection', socket => {
+      console.log('A client connected')
+    })
   })
   .catch(err => console.log(err));
